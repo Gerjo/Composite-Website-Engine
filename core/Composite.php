@@ -168,10 +168,10 @@ abstract class Composite {
     }
     
     public function setVisible($isVisible) {
-        // fix:
-        //if(!filter_var($isVisible, FILTER_VALIDATE_BOOLEAN)) {
-        //    throw new InvalidArgumentException("Hey! that's not a boolean.");
-        //}
+        if(!is_bool($isVisible)) {
+            throw new InvalidArgumentException("Hey! that's not a boolean.");
+        }
+        
         $this->isVisible = $isVisible;
     }
     
