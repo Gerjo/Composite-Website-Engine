@@ -126,13 +126,10 @@ abstract class Composite {
     }
     
     public final function prepareRecurse(ClientRequest $request, $isParentVisible) {
-        $isVisible = false;
         
         // If the parentis not visible, everything should be invisible from
         // this point onwards.
-        if($isParentVisible && $this->isVisible($request)) {
-            $isVisible = true;
-        }
+        $isVisible = $isParentVisible && $this->isVisible();
         
         $this->onPrepare($request, $isVisible);
         
