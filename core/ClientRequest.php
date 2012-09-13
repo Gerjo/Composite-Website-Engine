@@ -13,6 +13,11 @@ class ClientRequest {
         $this->server   = $server;
     }
     
+    /**
+     * Retrieve the requested file, includes a path, but no query string.
+     *
+     * @return string The requested file or path.
+     */
     public function getRequest() {
         if(isset($this->server['PATH_INFO'])) {
             return $this->server['PATH_INFO'];
