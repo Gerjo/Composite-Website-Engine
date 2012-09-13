@@ -25,12 +25,12 @@ abstract class Composite {
         //call_user_func_array(array(get_parent_class($this), "__construct"), array());
     }
     
-    public abstract function initialize();
-    public abstract function onRequest(Message $message);
-    public abstract function onMessage(Message $message);
-    public abstract function onRender (ClientRequest $request, Document $document);
-    public abstract function onPostChildRender (ClientRequest $request, Document $document);
-    public abstract function onPrepare(ClientRequest $request, $isParentVisible);
+    public function initialize() {}
+    public function onRequest(Message $message) {}
+    public function onMessage(Message $message) {}
+    public function onRender (ClientRequest $request, Document $document) {}
+    public function onPostChildRender (ClientRequest $request, Document $document) {}
+    public function onPrepare(ClientRequest $request, $isParentVisible) {}
     
     public final function sendRequest(Message $message) {
         $reply = new Reply();
