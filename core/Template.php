@@ -1,10 +1,12 @@
 <?php
 
-class Template {
+final class Template extends Composite {
     private $fileName;
     private $html;
     
     public function __construct($templateFile = null) {
+        parent::__construct();
+        
         $this->fileName = $templateFile;
         $this->html     = null;
         
@@ -17,16 +19,8 @@ class Template {
         }
     }
     
-    public function injectArray(array $data) {
-        foreach($data as $k => $v) {
-            $this->html = str_replace("[" . $k . "]", $v, $this->html);
-        }
-        
-        return $this;
-    }
-    
     // TODO variable calling and existance checking.
-    public function injectComponent(Composite $composite) {
+    private function injectComponent(Composite $composite) {
         preg_match_all('#\[([a-z]{1,})\]#i', $this->html, $keys);
         
         foreach($keys[1] as $k => $v) {
@@ -51,5 +45,10 @@ class Template {
         $clone->setHtml($this->getHtml());
         
         return $clone;
+    }
+    
+    public function onRender(ClientRequest $request, Document $document) {
+        $this->injectComponent($this->getParent());
+        $document->addTemplate($this);
     }
 }

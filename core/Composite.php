@@ -9,11 +9,13 @@ abstract class Composite {
     private $children;
     private $root;
     private $isVisible;
+    private $parent;
     
     public function __construct() {
         $this->children  = array();
         $this->isVisible = true;
         $this->root      = null;
+        $this->parent    = null;
         
         $this->initialize();
         
@@ -102,6 +104,7 @@ abstract class Composite {
             );
         }
         
+        $child->setParent($this);
         $child->setRoot($this->getRoot());
         
         $this->children[] = $child;
@@ -189,5 +192,13 @@ abstract class Composite {
         $this->renderRecurse($request, $document);
         
         return $document;
+    }
+    
+    public function setParent(Composite $parent) {
+        $this->parent = $parent;
+    }
+    
+    public function getParent() {
+        return $this->parent;
     }
 }
