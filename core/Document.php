@@ -15,6 +15,23 @@ class Document {
         $this->styleSheets = array();
     }
     
+    public function addDocument(Document $document) {
+        $this->appendHead($document->getHead());
+        $this->appendBody($document->getBody());
+        
+        foreach($document->getStylesheets() as $sheet) {
+            $this->addStylesheet($sheet);
+        }
+        
+        foreach($document->getJavascripts() as $script) {
+            $this->addJavascript($script);
+        }
+    }
+    
+    public function addTemplate(Template $template) {
+        $this->appendBody($template->getHtml());
+    }
+    
     public function addStylesheet($path) {
         $this->styleSheets[$path] = $path;
     }
@@ -60,5 +77,21 @@ class Document {
     
     public function __toString() {
         return $this->toHtml();
+    }
+    
+    public function getHead() {
+        return $this->head;
+    }
+    
+    public function getBody() {
+        return $this->body;
+    }
+    
+    public function getStylesheets() {
+        return $this->styleSheets;
+    }
+    
+    public function getJavascripts() {
+        return $this->javascripts;
     }
 }
