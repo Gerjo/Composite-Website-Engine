@@ -29,6 +29,6 @@ class ClientRequest {
     public function getCanonicalRequest() {
         $request = trim($this->getRequest(), "/");
 
-        return "/" . $request . "/";
+        return "/" . $request;
     }
 }
