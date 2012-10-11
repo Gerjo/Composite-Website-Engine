@@ -41,11 +41,11 @@ final class Template extends Composite {
                 $open   = '[' . $method . ']';
                 $close  = '[/' . $method . ']';
                 $regex  = '#' . preg_quote($open) . '(.+?)' . preg_quote($close) . '#s';
-
-                while(preg_match($regex, $this->html, $out) == 1) {
+                
+                while(preg_match($regex, $this->html, $htmlMatches) == 1) {
                     if(is_callable(array(get_class($composite), $method))) {
                         if(true === $composite->$method()) {
-                            $this->html = preg_replace($regex,  $out[1], $this->html);
+                            $this->html = preg_replace($regex,  $htmlMatches[1], $this->html);
                         } else {
                             $this->html = preg_replace($regex, "", $this->html);
                         }
