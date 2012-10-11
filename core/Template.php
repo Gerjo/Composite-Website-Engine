@@ -24,12 +24,12 @@ final class Template extends Composite {
         preg_match_all('#\[get([a-z]{1,})\]#i', $this->html, $keys);
 
         foreach($keys[1] as $k => $v) {
-            $method = $v;
+            $method = "get" . $v;
 
-            //if(is_callable($method))
-
-            $data       = $composite->$method();
-            $this->html = str_replace($keys[0][$k], $data, $this->html);
+            if(is_callable(array(get_class($this->getParent()), $method))) {
+                $data       = $composite->$method();
+                $this->html = str_replace($keys[0][$k], $data, $this->html);
+            }
         }
 
         return $this;
