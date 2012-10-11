@@ -26,9 +26,31 @@ final class Template extends Composite {
         foreach($keys[1] as $k => $v) {
             $method = "get" . $v;
 
-            if(is_callable(array(get_class($this->getParent()), $method))) {
+            if(is_callable(array(get_class($composite), $method))) {
                 $data       = $composite->$method();
                 $this->html = str_replace($keys[0][$k], $data, $this->html);
+            }
+        }
+
+        foreach(array("has", "can", "is", "enable", "should") as $prefix) {
+
+            preg_match_all('#\[' . $prefix . '([a-z]{1,})\]#i', $this->html, $keys);
+
+            foreach($keys[1] as $k => $v) {
+                $method = $prefix . $v;
+                $open   = '[' . $method . ']';
+                $close  = '[/' . $method . ']';
+                $regex  = '#' . preg_quote($open) . '(.+?)' . preg_quote($close) . '#s';
+
+                while(preg_match($regex, $this->html, $out) == 1) {
+                    if(is_callable(array(get_class($composite), $method))) {
+                        if(true === $composite->$method()) {
+                            $this->html = preg_replace($regex,  $out[1], $this->html);
+                        } else {
+                            $this->html = preg_replace($regex, "", $this->html);
+                        }
+                    }
+                }
             }
         }
 
