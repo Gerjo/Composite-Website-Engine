@@ -19,11 +19,9 @@ class ClientRequest {
      * @return string The requested file or path.
      */
     public function getRequest() {
-        if(isset($this->server['PATH_INFO'])) {
-            return $this->server['PATH_INFO'];
-        }
+        $info = parse_url($_SERVER['REQUEST_URI']);
 
-        return $this->server['SCRIPT_NAME'];
+        return $info['path'];
     }
 
     public function getCanonicalRequest() {
