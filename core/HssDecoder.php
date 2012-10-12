@@ -33,6 +33,8 @@ class HssDecoder {
 
         $this->asCss = "";
 
+        ksort($this->mapping);
+
         foreach($this->mapping as $selector => $rules) {
             $this->asCss .= $selector . ' {' . PHP_EOL;
             $this->asCss .= $rules;
