@@ -6,10 +6,12 @@ class Document {
     private $javascripts;
     private $styleSheets;
     private $hssDecoder;
+    private $title;
 
     public function __construct() {
-        $this->head = "";
-        $this->body = "";
+        $this->title = "Composites website engine"; // Default, some advertisement!
+        $this->head  = "";
+        $this->body  = "";
         $this->styleClasses = array();
         $this->javascripts  = array();
         $this->styleSheets  = array();
@@ -27,6 +29,10 @@ class Document {
         foreach($document->getJavascripts() as $script) {
             $this->addJavascript($script);
         }
+    }
+
+    public function setTitle($title) {
+        $this->title = $title;
     }
 
     public function addTemplate(Template $template) {
@@ -53,10 +59,11 @@ class Document {
         // TODO: some clever cache system here?
     }
 
+    // This whole method needs to be reworked. Too much harded stuff going on here.
     public function toHtml() {
         $html = "";
 
-        // Needs some fine grain tweaking.
+
         $html .= "<!DOCTYPE html>" . PHP_EOL;
         $html .= "<html><head>";
 
@@ -77,6 +84,7 @@ class Document {
 
         $html .= $this->head;
         $html .= "<style>" . PHP_EOL . $this->hssDecoder->toCss() . "</style>";
+        $html .= "<title>" . $this->title . "</title>";
         $html .= "</head><body>";
         $html .= $this->body;
         $html .= "</body></html>";
