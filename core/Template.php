@@ -40,7 +40,7 @@ final class Template extends Composite {
                 $open   = '[' . $method . ']';
                 $close  = '[/' . $method . ']';
                 $regex  = '#' . preg_quote($open) . '(.+?)' . preg_quote($close) . '#s';
-                
+
                 while(preg_match($regex, $html, $htmlMatches) == 1) {
                     if(is_callable(array(get_class($composite), $method))) {
                         if(true === $composite->$method()) {
@@ -52,36 +52,44 @@ final class Template extends Composite {
                 }
             }
         }
-    
+
         return $html;
     }
-    
+
     private function injectComponent(Composite $composite) {
         preg_match_all('#\[iterator\ ([a-z]{1,})\]#i', $this->html, $keys);
 
+
         foreach($keys[1] as $k => $v) {
             if(empty($v)) continue;
-            
+
             $method = $v;
             $open   = '[iterator ' . $method . ']';
             $close  = '[/iterator ' . $method . ']';
             $regex  = '#' . preg_quote($open) . '(.+?)' . preg_quote($close) . '#s';
-            
+
             preg_match($regex, $this->html, $out);
+
+            // No closing tag found.
+            if(!isset($out[1])) {
+                continue;
+            }
+
             $source    = $out[1];
             $formatted = "";
-            
+
             $iterator  = $composite->$method();
-            
+
             foreach($iterator as $k => $v) {
                 $formatted .= $this->apply($source, $v);
             }
-            
+
             $this->html = str_ireplace($out[0], $formatted, $this->html);
+
         }
-        
+
         $this->html = $this->apply($this->html, $composite);
- 
+
         return $this;
     }
 
