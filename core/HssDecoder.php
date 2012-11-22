@@ -12,6 +12,7 @@ class HssDecoder {
     private static $END_NEST      = '}';
     private static $END_RULE      = ';';
     private static $START_PSEUDO  = ':';
+    private static $GLUE          = '&';
 
     public function __construct() {
         $this->isDirty = false;
@@ -81,8 +82,17 @@ class HssDecoder {
                     $selector .= $tentativeSelector;
 
                 } else {
-                    // Apply some pretty formatting:
-                    if(substr($tentativeSelector, 0, 1) != self::$START_PSEUDO) {
+
+                    // Selectors prefixed with the GLUE symbol, receive no space.
+                    if(substr($tentativeSelector, 0, 1) == self::$GLUE) {
+                        // Trim the glue symbol:
+                        $tentativeSelector = ltrim($tentativeSelector, self::$GLUE);
+
+                    } else if(substr($tentativeSelector, 0, 1) == self::$START_PSEUDO) {
+                        // Do nothing. Generally PSEUDO's need no space.
+
+                    } else {
+                        // Prefix with a space:
                         $tentativeSelector = ' ' . $tentativeSelector;
                     }
 
