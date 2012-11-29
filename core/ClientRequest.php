@@ -25,8 +25,15 @@ class ClientRequest {
     }
 
     public function getCanonicalRequest() {
+        $info    = parse_url($_SERVER['REQUEST_URI']);
+        $file    = pathinfo($info['path']);
         $request = trim($this->getRequest(), "/");
 
-        return "/" . $request;
+        if(isset($file['basename'])) {
+            return "/" . $request;
+
+        } else {
+            return "/" . $request . '/';
+        }
     }
 }
