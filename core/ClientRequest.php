@@ -29,7 +29,7 @@ class ClientRequest {
         $file    = pathinfo($info['path']);
         $request = trim($this->getRequest(), "/");
 
-        if(isset($file['basename'])) {
+        if(isset($file['extension'])) {
             return "/" . $request;
 
         } else {
